@@ -38,43 +38,39 @@
     * 뿌린 사람 자신만 조회를 할 수 있습니다. 다른사람의 뿌리기건이나 유효하지 않은 token에 대해서는 조회 실패 응답이 내려가야 합니다. → #test002,#test003
     * 뿌린 건에 대한 조회는 7일 동안 할 수 있습니다. → #test004
 
-## 구현
+## 구현목표
 
-* 데이터베이스 저장을 통한 등록/수정 관리
+1. KEY가 되는 TOKEN이 3자리로 제약조건이 있다.
+2. 중복관리를 위해 별도의 KEY 생성한다.(TOKEN + 년월일 시간)
+3. 동일 TOKEN이 생성되더라도 중복 KEY로 오류발생 가능성을 낮춘다.
 
 ### 데이터베이스
 
 `MariaDB` 사용
 
-```mysql
-create database kakaopay;
-create user 'kakaopay'@'%' identified by 'gH4nRAxHG9NrhNAP';
-grant all privileges on kakaopay.* to 'kakaopay'@'%';
-flush privileges;
-```
-
 테이블 생성
 
 ```mysql
-create table tb_sprinkle
-(
-    token        char(3)      not null primary key,
-    room_id      varchar(255) not null,
-    user_id      bigint       not null,
-    amount       bigint       not null,
-    people_count int          not null
+CREATE TABLE `tb_sprinkle` (
+  `sprinkleKey` varchar(15) CHARACTER SET utf8mb4 NOT NULL,
+  `token` varchar(3) NOT NULL,
+  `room_id` varchar(100) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `amount` int(11) NOT NULL DEFAULT 0,
+  `user_cnt` int(11) NOT NULL DEFAULT 0,
+  `input_datetime` datetime NOT NULL DEFAULT sysdate(),
+  PRIMARY KEY (`sprinkleKey`)
 );
 
-create table tb_recv
-(
-    recv_id  bigint   not null auto_increment primary key,
-    token      char(3)  not null,
-    seq        int      not null,
-    amount     bigint   not null,
-    pickup_at  datetime null,
-    user_id    bigint   null,
-    constraint tb_recv_uindex unique (token, seq),
-    constraint tb_recv_ibfk_1 foreign key (token) references tb_sprinkle (token)
+CREATE TABLE `tb_sprinkle_recv` (
+  `seq_sprinkle_recv` bigint(20) NOT NULL AUTO_INCREMENT,
+  `token` varchar(3) NOT NULL,
+  `sprinkle_key` varchar(100) CHARACTER SET utf8mb4 NOT NULL,
+  `seq` int(11) NOT NULL,
+  `recv_amount` int(11) NOT NULL DEFAULT 0,
+  `user_id` int(11) DEFAULT NULL,
+  `recv_datetime` datetime DEFAULT sysdate(),
+  PRIMARY KEY (`seq_sprinkle_recv`)
 );
 ```
 
@@ -119,9 +115,9 @@ HTTP 응답코드
 
 ```json
 {
-  "code": "0000",
-  "message": "정상 처리",
-  "body": null
+   "code": "0000",
+   "message": "정상 처리",
+   "body": "MGh"
 }
 ```
 
@@ -161,13 +157,13 @@ HTTP 응답코드
 
 ```json
 {
-  "code": "0000",
-  "message": "정상 처리",
-  "body": "fCz"
+   "code": "0000",
+   "message": "정상 처리",
+   "body": "MGh"
 }
 ```
 
-### 줍기(받기) API
+### 받기 API
 
 #### 요청
 
@@ -187,9 +183,9 @@ HTTP 응답코드
 
 ```json
 {
-  "code": "0000",
-  "message": "정상 처리",
-  "body": 269
+   "code": "0000",
+   "message": "정상 처리",
+   "body": 6
 }
 ```
 
@@ -208,7 +204,7 @@ HTTP 응답코드
 | 이름 |  타입  | 필수 | 설명        |
 | ---- | :----: | :---: | ----------- |
 | body.datetime | string | ○ | 뿌린 시각 |
-| body.amount | long | ○ | 뿌린 금액 |
+| body.totalAmount | long | ○ | 뿌린 금액 |
 | body.recvAmount | long | ○ | 받기 완료된 금액 |
 | body.recvDTOList[].amount | long | ○ | 받은 금액 |
 | body.recvDTOList[].userId | long | ○ | 받은 사용자 식별값 |
@@ -217,19 +213,19 @@ HTTP 응답코드
 
 ```json
 {
-  "code": "0000",
-  "message": "정상 처리",
-  "body": {
-    "datetime": "20200627143825",
-    "amount": 1000,
-    "recvAmount": 330,
-    "recvDTOList": [
-      {
-        "userId": 20,
-        "amount": 330
-      }
-    ]
-  }
+   "code": "0000",
+   "message": "정상 처리",
+   "body": {
+      "datetime": "20210301230258",
+      "totalAmount": 1000,
+      "recvAmount": 6,
+      "recvDTOList": [
+        {
+         "userId": 20,
+         "amount": 6
+         }
+      ],
+   }
 }
 ```
 
