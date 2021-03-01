@@ -30,13 +30,13 @@ abstract public class SprinkleTests {
     protected ObjectMapper mapper;
 
     protected Sprinkle stub() {
-        Sprinkle sprinkle = new Sprinkle("AAA", "A", 10L, 1000L, 4);
-        Recv recv1 = new Recv(sprinkle, 1, 330L);
-        recv1.recvAmt(20); // 20 사용자가 받아감
+        Sprinkle sprinkle = new Sprinkle("AAA", "A", 10L, 1000L, 4, "AAA");
+        Recv recv1 = new Recv(sprinkle, 1, 330L, "AAA");
+        recv1.recvAmount(20); // 20 사용자가 받아감
         sprinkle.getRecvs().add(recv1);
-        sprinkle.getRecvs().add(new Recv(sprinkle, 2, 269L));
-        sprinkle.getRecvs().add(new Recv(sprinkle, 3, 235L));
-        sprinkle.getRecvs().add(new Recv(sprinkle, 4, 466L));
+        sprinkle.getRecvs().add(new Recv(sprinkle, 2, 269L, "AAA"));
+        sprinkle.getRecvs().add(new Recv(sprinkle, 3, 235L, "AAA"));
+        sprinkle.getRecvs().add(new Recv(sprinkle, 4, 466L, "AAA"));
         return sprinkle;
     }
 

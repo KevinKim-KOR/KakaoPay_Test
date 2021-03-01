@@ -26,7 +26,7 @@ public class XHeaderTest extends SprinkleTests {
         )
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code", is(Codes.E0100.code)))
+                .andExpect(jsonPath("$.code", is(Codes.E0010.code)))
                 .andExpect(jsonPath("$.message", Matchers.notNullValue()))
         ;
     }
@@ -42,7 +42,7 @@ public class XHeaderTest extends SprinkleTests {
         )
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code", is(Codes.E0100.code)))
+                .andExpect(jsonPath("$.code", is(Codes.E0010.code)))
                 .andExpect(jsonPath("$.message", Matchers.notNullValue()))
         ;
     }

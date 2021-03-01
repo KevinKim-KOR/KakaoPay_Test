@@ -30,7 +30,7 @@ public class RecvApiTest extends SprinkleTests {
         pickup("ABC", "A", 90)  // 받지 않은 사용자
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code", is("0000")))
-                .andExpect(jsonPath("$.body").value(sprinkle.getRecvs().get(1).getAmount()))
+                .andExpect(jsonPath("$.body").value(sprinkle.getRecvs().get(1).getRecvAmount()))
         ;
     }
 
@@ -41,7 +41,7 @@ public class RecvApiTest extends SprinkleTests {
 
         pickup("ABC", "A", 20) // 이미 받은 사용자
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code", is(Codes.E0200.code)))
+                .andExpect(jsonPath("$.code", is(Codes.E0020.code)))
                 .andExpect(jsonPath("$.message", notNullValue()))
         ;
     }
@@ -53,7 +53,7 @@ public class RecvApiTest extends SprinkleTests {
 
         pickup("ABC", "A", 10)  // 뿌리기한 사용자
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code", is(Codes.E0200.code)))
+                .andExpect(jsonPath("$.code", is(Codes.E0020.code)))
                 .andExpect(jsonPath("$.message", notNullValue()))
         ;
     }
@@ -65,7 +65,7 @@ public class RecvApiTest extends SprinkleTests {
 
         pickup("ABC", "B", 60)      // "B"는 다른 대화방
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code", is(Codes.E0200.code)))
+                .andExpect(jsonPath("$.code", is(Codes.E0020.code)))
                 .andExpect(jsonPath("$.message", notNullValue()))
         ;
     }
@@ -79,7 +79,7 @@ public class RecvApiTest extends SprinkleTests {
 
         pickup("ABC", "A", 60)
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code", is(Codes.E0200.code)))
+                .andExpect(jsonPath("$.code", is(Codes.E0020.code)))
                 .andExpect(jsonPath("$.message", notNullValue()))
         ;
     }

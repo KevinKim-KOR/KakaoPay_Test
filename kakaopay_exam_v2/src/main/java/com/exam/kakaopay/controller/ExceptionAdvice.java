@@ -21,25 +21,25 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
    @Override
     protected ResponseEntity<Object> handleServletRequestBindingException(ServletRequestBindingException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        return new ResponseEntity<>(ApiResponse.of(Codes.E0100.code, ex.getMessage()), headers, status);
+        return new ResponseEntity<>(ApiResponse.of(Codes.E0010.code, ex.getMessage()), headers, status);
     }
 
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     ApiResponse validation(ValidationException e) {
-        return ApiResponse.of(Codes.E0200.code, e.getMessage());
+        return ApiResponse.of(Codes.E0020.code, e.getMessage());
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     ApiResponse validation(AccessDeniedException e) {
-        return ApiResponse.of(Codes.E0300.code, e.getMessage());
+        return ApiResponse.of(Codes.E0030.code, e.getMessage());
     }
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     ApiResponse validation(NotFoundException e) {
-        return ApiResponse.of(Codes.E0400.code, e.getMessage());
+        return ApiResponse.of(Codes.E0040.code, e.getMessage());
     }
 
 

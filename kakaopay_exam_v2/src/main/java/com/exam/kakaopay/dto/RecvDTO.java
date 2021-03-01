@@ -9,5 +9,6 @@ import lombok.ToString;
 @RequiredArgsConstructor
 public class RecvDTO {
     private final long userId;
+    //private final long roomId;
     private final long amount;
 }

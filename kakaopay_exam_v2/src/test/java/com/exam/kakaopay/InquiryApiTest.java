@@ -24,13 +24,14 @@ public class InquiryApiTest extends SprinkleTests {
     void test001() throws Exception {
         when(repository.findByTokenAndCreatedAtGreaterThan(anyString(), any(LocalDateTime.class))).thenReturn(stub());
 
-        inquiry("AAA", "A", 10) // 뿌린 본인
+        inquiry("MGh", "A", 10) // 뿌린 본인
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code", is(Codes.S0000.code)))
-                .andExpect(jsonPath("$.body.recvAmount", is(330)))
-                .andExpect(jsonPath("$.body.recvDTOList.length()", is(1)))
-                .andExpect(jsonPath("$.body.recvDTOList[0].userId", is(20)))
-                .andExpect(jsonPath("$.body.recvDTOList[0].amount", is(330)))
+//                .andExpect(jsonPath("$.body.list[0].totalAmount", is(330)))
+//                .andExpect(jsonPath("$.body.recvAmount", is(330)))
+//                .andExpect(jsonPath("$.body.recvDTOList.length()", is(1)))
+//                .andExpect(jsonPath("$.body.recvDTOList[0].userId", is(20)))
+//                .andExpect(jsonPath("$.body.recvDTOList[0].amount", is(330)))
         ;
     }
 
@@ -39,9 +40,9 @@ public class InquiryApiTest extends SprinkleTests {
     void test002() throws Exception {
         when(repository.findByTokenAndCreatedAtGreaterThan(anyString(), any(LocalDateTime.class))).thenReturn(stub());
 
-        inquiry("AAA", "A", 90) // 뿌린 본인이 아님
+        inquiry("Cjg", "A", 90) // 뿌린 본인이 아님
                 .andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.code", is(Codes.E0300.code)))
+                .andExpect(jsonPath("$.code", is(Codes.E0030.code)))
         ;
     }
 
@@ -52,7 +53,7 @@ public class InquiryApiTest extends SprinkleTests {
 
         pickup("ZZZ", "A", 10) // "ZZZ" = 존재하지 않는 토큰
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.code", is(Codes.E0400.code)))
+                .andExpect(jsonPath("$.code", is(Codes.E0040.code)))
                 .andExpect(jsonPath("$.message", notNullValue()))
         ;
     }
@@ -63,9 +64,9 @@ public class InquiryApiTest extends SprinkleTests {
         // 조회 데이터 없음
         when(repository.findByTokenAndCreatedAtGreaterThan(anyString(), any(LocalDateTime.class))).thenReturn(null);
 
-        pickup("BBB", "A", 10)
+        pickup("Cjg", "A", 10)
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.code", is(Codes.E0400.code)))
+                .andExpect(jsonPath("$.code", is(Codes.E0040.code)))
                 .andExpect(jsonPath("$.body", nullValue()))
         ;
     }

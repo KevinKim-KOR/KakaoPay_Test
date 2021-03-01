@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -54,23 +56,28 @@ public class SprinkleApiController {
     }
 
     @GetMapping(value = "/{token:[a-zA-Z]{3}}")
-    ApiResponse retreiveSprinkleList(
+    ApiResponse retreiveSprinkleList2(
             @RequestHeader(Header.ROOM_ID) String roomId,
             @RequestHeader(Header.USER_ID) long userId,
             @PathVariable("token") String token) {
         log.debug("roomId={}, userId={}, token={}", roomId, userId, token);
-        Sprinkle sprinkle = sprinkleService.retreiveSprinkleList(userId, token);
+        List<Sprinkle> sprinkleList = sprinkleService.retreiveSprinkleList2(userId, token);
+        List<SprinkleDTO> dtoList = new ArrayList<SprinkleDTO>();
 
-        SprinkleDTO dto = new SprinkleDTO(
-                sprinkle.getCreatedAt(),
-                sprinkle.getAmount(),
-                sprinkle.getRecvs().stream().filter(Recv::isReceived).mapToLong(Recv::getAmount).sum(),
-                sprinkle.getRecvs().stream()
-                        .filter(Recv::isReceived)
-                        .map(it -> new RecvDTO(it.getUserId(), it.getAmount()))
-                        .collect(Collectors.toList())
-        );
-        return ApiResponse.of(Codes.S0000, dto);
+        for (Sprinkle sprinkle : sprinkleList) {
+            SprinkleDTO dto = new SprinkleDTO(
+                    sprinkle.getCreatedAt(),
+                    sprinkle.getAmount(),
+                    sprinkle.getRecvs().stream().filter(Recv::isReceived).mapToLong(Recv::getRecvAmount).sum(),
+                    sprinkle.getRecvs().stream()
+                            .filter(Recv::isReceived)
+                            .map(it -> new RecvDTO(it.getUserId(), it.getRecvAmount()))
+                            .collect(Collectors.toList())
+            );
+            dtoList.add(dto);
+        }
+
+        return ApiResponse.of(Codes.S0000, dtoList);
     }
 
 }

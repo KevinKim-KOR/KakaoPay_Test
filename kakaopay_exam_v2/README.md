@@ -3,8 +3,8 @@
 ## 요구 사항
 
 * 뿌리기, 받기, 조회 기능을 수행하는 REST API 를 구현합니다.
-    * 요청한 사용자의 식별값은 숫자 형태이며 "X-USER-ID" 라는 HTTP Header로 전달됩니다. → #test001
-    * 요청한 사용자가 속한 대화방의 식별값은 문자 형태이며 "X-ROOM-ID" 라는 HTTP Header로 전달됩니다.  → #test002
+    * 요청한 사용자의 식별값은 숫자 형태이며 "X-USER-ID" 라는 HTTP Header로 전달됩니다. → `org.antop.kakao.XHeaderTest#test001`
+    * 요청한 사용자가 속한 대화방의 식별값은 문자 형태이며 "X-ROOM-ID" 라는 HTTP Header로 전달됩니다.  → `org.antop.kakao.XHeaderTest#test002`
     * 모든 사용자는 뿌리기에 충분한 잔액을 보유하고 있다고 가정하여 별도로 잔액에 관련된 체크는 하지 않습니다.
     * 작성하신 어플리케이션이 다수의 서버에 다수의 인스턴스로 동작하더라도 기능에 문제가 없도록 설계되어야 합니다.
     * 각 기능 및 제약사항에 대한 단위테스트를 반드시 작성합니다.
@@ -15,7 +15,7 @@
 
 * 다음 조건을 만족하는 뿌리기 API를 만들어 주세요.
     * 뿌릴 금액, 뿌릴 인원을 요청값으로 받습니다.
-    * 뿌리기 요청건에 대한 고유 token을 발급하고 응답값으로 내려줍니다. → #test001
+    * 뿌리기 요청건에 대한 고유 token을 발급하고 응답값으로 내려줍니다. → `org.antop.kakao.SeedingApiTest#test001`
     * 뿌릴 금액을 인원수에 맞게 분배하여 저장합니다. (분배 로직은 자유롭게 구현해 주세요.)
     * token은 3자리 문자열로 구성되며 예측이 불가능해야 합니다.
 
@@ -23,58 +23,79 @@
 
 * 다음 조건을 만족하는 받기 API를 만들어 주세요.
     * 뿌리기 시 발급된 token을 요청값으로 받습니다.
-    * token에 해당하는 뿌리기 건 중 아직 누구에게도 할당되지 않은 분배건 하나를 API를 호출한 사용자에게 할당하고, 그 금액을 응답값으로 내려줍니다. → #test001
-    * 뿌리기 당 한 사용자는 한번만 받을 수 있습니다. → #test002
-    * 자신이 뿌리기한 건은 자신이 받을 수 없습니다. →  #test003
-    * 뿌린이가 호출된 대화방과 동일한 대화방에 속한 사용자만이 받을 수 있습니다. → #test004
-    * 뿌린 건은 10분간만 유효합니다. 뿌린지 10분이 지난 요청에 대해서는 받기 실패 응답이 내려가야 합니다. → #test005
+    * token에 해당하는 뿌리기 건 중 아직 누구에게도 할당되지 않은 분배건 하나를 API를 호출한 사용자에게 할당하고, 그 금액을 응답값으로 내려줍니다. → `org.antop.kakao.PickupApiTest#test001`
+    * 뿌리기 당 한 사용자는 한번만 받을 수 있습니다. → `org.antop.kakao.PickupApiTest#test002`
+    * 자신이 뿌리기한 건은 자신이 받을 수 없습니다. →  `org.antop.kakao.PickupApiTest#test003`
+    * 뿌린이가 호출된 대화방과 동일한 대화방에 속한 사용자만이 받을 수 있습니다. → `org.antop.kakao.PickupApiTest#test004`
+    * 뿌린 건은 10분간만 유효합니다. 뿌린지 10분이 지난 요청에 대해서는 받기 실패 응답이 내려가야 합니다. → `org.antop.kakao.PickupApiTest#test005`
 
 ### 3. 조회 API → `GET` /api/v1/{token}
 
 * 다음 조건을 만족하는 조회 API를 만들어 주세요.
     * 뿌리기 시 발급된 token을 요청값으로 받습니다.
-    * token에 해당하는 뿌리기 건의 현재 상태를 응답값으로 내려줍니다. 현재 상태는 다음의 정보를 포함합니다. → #test001
-    * 뿌린 시각, 뿌린 금액, 받기 완료된 금액, 받기 완료된 정보 ([받은 금액, 받은 사용자 아이디] 리스트)  →  #test001
-    * 뿌린 사람 자신만 조회를 할 수 있습니다. 다른사람의 뿌리기건이나 유효하지 않은 token에 대해서는 조회 실패 응답이 내려가야 합니다. → #test002,#test003
-    * 뿌린 건에 대한 조회는 7일 동안 할 수 있습니다. → #test004
+    * token에 해당하는 뿌리기 건의 현재 상태를 응답값으로 내려줍니다. 현재 상태는 다음의 정보를 포함합니다. → `org.antop.kakao.InquiryApiTest#test001`
+    * 뿌린 시각, 뿌린 금액, 받기 완료된 금액, 받기 완료된 정보 ([받은 금액, 받은 사용자 아이디] 리스트)  →  `org.antop.kakao.InquiryApiTest#test001`
+    * 뿌린 사람 자신만 조회를 할 수 있습니다. 다른사람의 뿌리기건이나 유효하지 않은 token에 대해서는 조회 실패 응답이 내려가야 합니다. → `org.antop.kakao.InquiryApiTest#test002`, `org.antop.kakao.InquiryApiTest#test003`
+    * 뿌린 건에 대한 조회는 7일 동안 할 수 있습니다. → `org.antop.kakao.InquiryApiTest#test004`
 
-## 구현목표
+## 구현
 
-1. KEY가 되는 TOKEN이 3자리로 제약조건이 있다.
-2. 중복관리를 위해 별도의 KEY 생성한다.(TOKEN + 년월일 시간)
-3. 동일 TOKEN이 생성되더라도 유일KEY로 오류발생 가능성을 낮춘다.
-4. 기생성된 동일TOKEN을 호출하더라도 유효한 TOKEN에 대해서만 정상동작하게 개발한다.
-5. 유효한 TOKEN이 없을 경우 EXCEPTION 처리한다.
+### 계획
+
+![](https://i.imgur.com/bPJt63L.png)
+
+1. `Redis`(또는 `Hazelcast`)를 이용한 글로벌 캐싱
+2. `Lock`을 이용한 동시성 해결
+3. 캐시와 데이터베이스 상태 동기
+
+### 현실
+
+* ~~Redi를 이용한 글로벌 캐싱~~
+* ~~Lock을 이용한 동시성 해결~~
+* ~~캐시와 데이터베이스 데이터의 상태 동기~~
+* 데이터베이스에 등록/수정
 
 ### 데이터베이스
 
 `MariaDB` 사용
 
+```mysql
+create database kakaopay;
+create user 'kakaopay'@'%' identified by 'gH4nRAxHG9NrhNAP';
+grant all privileges on kakaopay.* to 'kakaopay'@'%';
+flush privileges;
+```
+
 테이블 생성
 
+![](https://i.imgur.com/4MxsZ0M.png)
+
 ```mysql
-CREATE TABLE `tb_sprinkle` (
-  `sprinkleKey` varchar(15) CHARACTER SET utf8mb4 NOT NULL,
-  `token` varchar(3) NOT NULL,
-  `room_id` varchar(100) NOT NULL,
-  `user_id` bigint(20) NOT NULL,
-  `amount` int(11) NOT NULL DEFAULT 0,
-  `user_cnt` int(11) NOT NULL DEFAULT 0,
-  `input_datetime` datetime NOT NULL DEFAULT sysdate(),
-  PRIMARY KEY (`sprinkleKey`)
+create table tb_seeding
+(
+    token        char(3)      not null primary key,
+    room_id      varchar(255) not null,
+    user_id      bigint       not null,
+    amount       bigint       not null,
+    people_count int          not null
 );
 
-CREATE TABLE `tb_sprinkle_recv` (
-  `seq_sprinkle_recv` bigint(20) NOT NULL AUTO_INCREMENT,
-  `token` varchar(3) NOT NULL,
-  `sprinkle_key` varchar(100) CHARACTER SET utf8mb4 NOT NULL,
-  `seq` int(11) NOT NULL,
-  `recv_amount` int(11) NOT NULL DEFAULT 0,
-  `user_id` int(11) DEFAULT NULL,
-  `recv_datetime` datetime DEFAULT sysdate(),
-  PRIMARY KEY (`seq_sprinkle_recv`)
+create table tb_pickup
+(
+    pickup_id  bigint   not null auto_increment primary key,
+    token      char(3)  not null,
+    seq        int      not null,
+    amount     bigint   not null,
+    pickup_at  datetime null,
+    user_id    bigint   null,
+    constraint tb_pickup_uindex unique (token, seq),
+    constraint tb_pickup_ibfk_1 foreign key (token) references tb_seeding (token)
 );
 ```
+
+## 테스트
+
+![](https://i.imgur.com/qUVF5zv.png)
 
 ## API 명세서
 
@@ -94,7 +115,7 @@ HTTP 응답코드
 
 | 응답코드 | 설명                  |
 | -------- | --------------------- |
-| `200`    | **정상 응답**         |
+| `200` | **정상 응답**         |
 | `400`    | 잘못된 요청           |
 | `404`    | 리소스를 찾을 수 없음 |
 | `500`    | 시스템 에러           |
@@ -117,9 +138,9 @@ HTTP 응답코드
 
 ```json
 {
-   "code": "0000",
-   "message": "정상 처리",
-   "body": "MGh"
+  "code": "0000",
+  "message": "정상 처리",
+  "body": null
 }
 ```
 
@@ -159,13 +180,13 @@ HTTP 응답코드
 
 ```json
 {
-   "code": "0000",
-   "message": "정상 처리",
-   "body": "MGh"
+  "code": "0000",
+  "message": "정상 처리",
+  "body": "fCz"
 }
 ```
 
-### 받기 API
+### 줍기(받기) API
 
 #### 요청
 
@@ -185,9 +206,9 @@ HTTP 응답코드
 
 ```json
 {
-   "code": "0000",
-   "message": "정상 처리",
-   "body": 6
+  "code": "0000",
+  "message": "정상 처리",
+  "body": 269
 }
 ```
 
@@ -206,28 +227,28 @@ HTTP 응답코드
 | 이름 |  타입  | 필수 | 설명        |
 | ---- | :----: | :---: | ----------- |
 | body.datetime | string | ○ | 뿌린 시각 |
-| body.totalAmount | long | ○ | 뿌린 금액 |
-| body.recvAmount | long | ○ | 받기 완료된 금액 |
-| body.recvDTOList[].amount | long | ○ | 받은 금액 |
-| body.recvDTOList[].userId | long | ○ | 받은 사용자 식별값 |
+| body.amount | long | ○ | 뿌린 금액 |
+| body.pickupAmount | long | ○ | 받기 완료된 금액 |
+| body.pickups[].amount | long | ○ | 받은 금액 |
+| body.pickups[].userId | long | ○ | 받은 사용자 식별값 |
 
 응답 예시
 
 ```json
 {
-   "code": "0000",
-   "message": "정상 처리",
-   "body": {
-      "datetime": "20210301230258",
-      "totalAmount": 1000,
-      "recvAmount": 6,
-      "recvDTOList": [
-        {
-         "userId": 20,
-         "amount": 6
-         }
-      ],
-   }
+  "code": "0000",
+  "message": "정상 처리",
+  "body": {
+    "datetime": "20200627143825",
+    "amount": 1000,
+    "pickupAmount": 330,
+    "pickups": [
+      {
+        "userId": 20,
+        "amount": 330
+      }
+    ]
+  }
 }
 ```
 

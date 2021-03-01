@@ -9,7 +9,7 @@ server:
 spring:
   datasource:
     driverClassName: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/MySQL
+    url: jdbc:mariadb://localhost:3306/kakaopay
     username: root
     password: qwe123
   jpa:
